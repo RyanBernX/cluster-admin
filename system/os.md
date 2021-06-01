@@ -15,5 +15,5 @@
 
 安装操作系统这里不做过多说明，和给自己笔记本安装基本完全一致。CentOS 7 需要选择安装模式，如下图。一般选择 **Compute Node** 就好，右边的 Add-On 可以根据个人情况选择。服务器系统一般不需要图形用户界面（GUI）。
 
-![](../.gitbook/assets/screenshot-from-2021-06-01-17-10-46.png)
+![](../.gitbook/assets/centos7-env.png)
 
