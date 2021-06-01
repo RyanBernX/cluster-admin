@@ -43,7 +43,7 @@
 * 计算节点 1：`192.168.1.11` 
 * 计算节点 2：`192.168.1.12` 
 
-配置完毕后可以尝试使用 `ping` 来测试网络是否畅通。例如：
+配置完毕后启用连接（`nmtui` 中选择“Activate a Connection”），之后可以使用 `ping` 来测试网络是否畅通。例如：
 
 ```text
 ping 192.168.1.101 # 从登录节点 ping 存储节点
@@ -137,7 +137,7 @@ trusted (active)
 * Gateway 字段填写的是登录节点的 IP。
 * DNS servers 填写的是登录节点自动获取的 DNS 服务器地址（可以通过在登录节点 `cat /etc/resolv.conf` 进行查询，如果有多个地址就都写上）。
 * 由于涉及数据的转发，需要**去掉**“Never use this network for default route”选项。
-* 配置完毕后重启网络服务以生效（`systemctl restart NetworkManager`）
+* 配置完毕后重新启用连接以生效（使用 `nmtui`）。
 
 {% hint style="danger" %}
 如果集群有多个局域网网段（例如存在计算网），只能在其中的一个网段配置 NAT（建议在管理网段上配置），其它网段仍然维持原有状态。
