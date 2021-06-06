@@ -4,7 +4,7 @@
 
 ### 使用镜像服务器
 
-该方式和配置个人计算机 YUM 镜像的步骤相同。主要是修改 `/etc/yum.repos.d/CentOS-Base.repo` 文件，在各个镜像服务器网站上已经有比较详细的说明。以[清华镜像](https://mirrors.tuna.tsinghua.edu.cn/help/centos/)为例，修改后该文件应该类似这样（如果你要用清华源的话可以直接复制）：
+该方式和配置个人计算机 YUM 镜像的步骤相同。主要是修改 `/etc/yum.repos.d/CentOS-Base.repo` 文件，在各个镜像服务器网站上已经有比较详细的说明。以[清华镜像](https://mirrors.tuna.tsinghua.edu.cn/help/centos/)为例，修改后该文件应该类似这样（如果你要用清华源的话可以直接复制，**每个节点都需要修改**）：
 
 ```text
 [base]
@@ -126,7 +126,7 @@ epel 仓库没有提供 ISO，因此不能使用这种方式创建本地 epel �
 
 #### 修改 YUM 配置文件
 
-本地存在 CentOS 源后，将 YUM 的配置指向本地目录，方式还是修改 `CentOS-Base.repo` 文件。
+本地存在 CentOS 源后，将 YUM 的配置指向本地目录，方式还是修改 `CentOS-Base.repo` 文件（每个节点都需要修改）。
 
 ```text
 [base]
