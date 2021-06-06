@@ -4,7 +4,7 @@
 
 ### 使用镜像服务器
 
-该方式和配置个人计算机 YUM 镜像的步骤相同。主要是修改 `/etc/yum.repos.d/CentOS-Base.repo` 文件，在各个镜像服务器网站上已经有比较详细的说明。以[清华镜像](https://mirrors.tuna.tsinghua.edu.cn/help/centos/)为例，修改后该文件应该类似这样（如果你要用清华源的话可以直接复制，**每个节点都需要修改**）：
+该方式和配置个人计算机 YUM 镜像的步骤相同。主要是修改 `/etc/yum.repos.d/CentOS-Base.repo` 文件（**每个节点都需要修改**），在各个镜像服务器网站上已经有比较详细的说明。以[清华镜像](https://mirrors.tuna.tsinghua.edu.cn/help/centos/)为例，修改后该文件应该类似这样（如果要用清华源的话可以直接复制）：
 
 ```text
 [base]
@@ -41,7 +41,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 
 ```
 
-注意 30 行的地方 `enabled=0` 表示不启用 `centosplus` 这一组库。经过这样设置，`base` `updates` `extras` 就会从清华源安装了。利用同样的方式还可以配置 `epel` 等其它源，此处不再赘述。
+注意 30 行的地方 `enabled=0` 表示不启用 `centosplus` 这一组库（默认的配置，有需要可以改成 `enabled=1`）。经过这样设置，`base` `updates` `extras` 就会从清华源安装了。利用同样的方式还可以配置 `epel` 等其它源，此处不再赘述。
 
 {% hint style="warning" %}
 只有能访问到镜像服务器的节点才能使用这种方式。如果没有配置[计算节点连接外网](https://ryanbernx.gitbook.io/cluster-admin/system/network#ji-suan-jie-dian-lian-jie-wai-wang-nat)，那么计算节点将不能使用这种方式安装软件。
@@ -78,7 +78,7 @@ $RSYNC \
 同步完毕后会在 `/opt/centos` 下看到类似如下结构：
 
 ```text
-- 7（软连接，指向最新小版本对应的目录）
+- 7（软链接，指向最新小版本对应的目录）
 - 7.0.1406
 - 7.1.1503
 - ...
@@ -97,10 +97,10 @@ CentOS 系列每经过一个小版本更新，源中的安装包就会自动移�
 由于镜像服务器经常会更新，复制的本地镜像最好也需要和上游同步。可以使用 crontab 来定时进行同步。输入命令 `crontab -e` 打开 crontab 的编辑界面，之后添加如下一行：
 
 ```text
-10 4 * * * /root/bin/sync_centos.sh > /tmp/rsync-centos.log 2>&1
+10 4 * * * /usr/local/bin/sync_centos.sh > /tmp/rsync-centos.log 2>&1
 ```
 
-以上假定了同步的脚本放在了 `/root/bin` 中，且使用 root 用户操作。设置成功后，相应节点就会在每日 4:10 左右与上游镜像服务器同步一次。
+以上假定了同步的脚本放在了 `/usr/local/bin` 中。设置成功后，相应节点就会在每日 4:10 左右与上游镜像服务器同步一次。
 
 #### 使用 ISO 镜像
 
@@ -117,12 +117,12 @@ mount -o loop CentOS-7-x86_64-Everything-XXXX.iso /opt/centos/7
 之后在 `/opt/centos/7` 目录下会看到和镜像中类似的结构。
 
 {% hint style="danger" %}
-epel 仓库没有提供 ISO，因此不能使用这种方式创建本地 epel 源，只能通过复制镜像服务器的方式。
+epel 仓库没有提供 ISO，因此不能使用这种方式创建本地 epel 源，只能复制镜像服务器。
 {% endhint %}
 
 #### 将本地源共享给其它节点
 
-无论是使用镜像服务器还是 ISO，下载的文件只在一个节点上存在（登录节点 or 存储节点），想要使得计算节点可以访问这些目录必须配置网络文件系统（NFS），我们在[配置 NFS](https://ryanbernx.gitbook.io/cluster-admin/system/nfs) 部分介绍全部过程。
+无论是使用镜像服务器还是 ISO，下载的文件只在一个节点上存在（登录节点或存储节点等），想要使得计算节点可以访问这些目录必须配置网络文件系统（NFS），我们在[配置 NFS](https://ryanbernx.gitbook.io/cluster-admin/system/nfs) 页面介绍全部过程。
 
 #### 修改 YUM 配置文件
 
