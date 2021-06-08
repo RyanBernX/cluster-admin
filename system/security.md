@@ -67,7 +67,7 @@ firewall-cmd --reload
 
 此时遇到新连接后防火墙的判断逻辑是这样：
 
-![&#x5E26; IP &#x7F51;&#x6BB5;&#x5224;&#x65AD;&#x7684;&#x9632;&#x706B;&#x5899;&#x5224;&#x65AD;&#x903B;&#x8F91;](../.gitbook/assets/firewall-source.png)
+![](../.gitbook/assets/firewall-source.png)
 
 可以看到防火墙会**优先判断 IP**地址，当 IP 地址不满足时**不会**马上阻止连接，而是继续判断网络接口是否匹配。在配置防火墙规则时一定要牢记这个特性。
 
@@ -136,7 +136,7 @@ echo $pass | passwd --stdin jack
 
 ### 关闭 SELinux
 
-SELinux（Security-Enhanced Linux）是 Linux 的安全加强模式，其提供了更加严格的权限控制和策略。在 CentOS 7 种 SELinux 默认是**开启**的。但这里我们是要考虑关闭这个模块，原因如下：
+SELinux（Security-Enhanced Linux）是 Linux 的安全加强模式，其提供了更加严格的权限控制和策略。在 CentOS 7 中 SELinux 默认是**开启**的。但这里我们是要考虑关闭这个模块，原因如下：
 
 1. SELinux 配置复杂，学习难度大，本身设计是给想越权的人带来一定限制，但如此庞大的机制先把管理员绕晕了。
 2. 文件系统提供的权限机制在小型集群上已经够用，只要稍微注意尽量不使用 root 用户运行服务就不会有太大问题。
@@ -145,7 +145,7 @@ SELinux 有三种模式：enforcing，permissive，disabled。可以使用 `sest
 
 * enforcing：启用 SELinux，并且严格遵守 SELinux 的安全策略。
 * permissive：启用 SELinux，但对违反策略的行为不真正阻止，只记录日志。
-* disabled：关闭 SELinux
+* disabled：关闭 SELinux。
 
 由于 SELinux 启用时需要在文件系统中构建数据，如果直接关闭，在系统运行一段时间后重新启用 SELinux，则会在开机过程中占用大量时间重新构建 SELinux 数据（中途异常中断可能导致系统无法开机）。所以**不推荐直接设置为 disabled** ，设置成 permissive 是个很好的折中。
 
