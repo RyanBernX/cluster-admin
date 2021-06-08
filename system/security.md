@@ -44,7 +44,7 @@ firewall-cmd --zone=public --add-service=http --permanent
 firewall-cmd --reload
 ```
 
-即可放行 80 和 443 端口。这里 `--add-service=https,http` 实际上是调用了 `firewalld` 预定义 `https,http` 配置文件。
+即可放行 80 和 443 端口。这里 `--add-service=https` 实际上是调用了 `firewalld` 预定义 `https` 配置文件。
 
 如果想放行特定端口（例如 25000 的 tcp 端口），需要执行：
 
