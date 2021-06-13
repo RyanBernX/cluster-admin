@@ -101,6 +101,10 @@ firewall-cmd --zone=public --add-masquerade --permanent
 firewall-cmd --zone=trusted --add-interface=ens36 --permanent
 ```
 
+{% hint style="success" %}
+关联 trusted 在这里是为了仅使得连接外网的网络接口启用转发。在后面配置各种服务中将会看到这一操作的其它作用。
+{% endhint %}
+
 最后重新载入防火墙配置：
 
 ```text
