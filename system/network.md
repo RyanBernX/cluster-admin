@@ -16,7 +16,7 @@
 
 也就是说，如果考虑计算网，计算节点、存储节点等需要连两根网线，而登录节点需要三根（因此登录节点最好有三张以上的网卡，且有一个是高速网网卡）。而网络通讯模型将会是这样：
 
-![&#x7B80;&#x5355;&#x5C40;&#x57DF;&#x7F51;&#x67B6;&#x6784;](../.gitbook/assets/network.png)
+![简单局域网架构](../.gitbook/assets/network.png)
 
 如果不考虑计算网，那么计算、存储节点需要连一根网线，登录节点需要两根（一般服务器至少会有两个千兆以太网口）。
 
@@ -26,7 +26,7 @@
 
 `nmtui` 可以**配置网络连接、设置主机名**，选择插上交换机的网络接口之后，手动分配 IP 即可。
 
-![&#x624B;&#x52A8;&#x5206;&#x914D; IP &#x793A;&#x4F8B;](../.gitbook/assets/nmtui1.png)
+![手动分配 IP 示例](../.gitbook/assets/nmtui1.png)
 
 {% hint style="warning" %}
 由于登录节点对外连接的网络接口已经根据 DHCP 服务器自动配置 IP、DNS、网关等信息，因此登录节点连接内网交换机的这个接口就**不要配置默认路由**（计算节点需要上网的情形除外）**。**
@@ -38,14 +38,14 @@
 
 在我这组示例中，我使用 `nmtui` 配置了一个具有四个节点的简单集群：
 
-* 登录节点：`192.168.1.100` 
-* 存储节点：`192.168.1.101` 
-* 计算节点 1：`192.168.1.11` 
-* 计算节点 2：`192.168.1.12` 
+* 登录节点：`192.168.1.100`&#x20;
+* 存储节点：`192.168.1.101`&#x20;
+* 计算节点 1：`192.168.1.11`&#x20;
+* 计算节点 2：`192.168.1.12`&#x20;
 
 配置完毕后启用连接（`nmtui` 中选择“Activate a Connection”），之后可以使用 `ping` 来测试网络是否畅通。例如：
 
-```text
+```
 ping 192.168.1.101 # 从登录节点 ping 存储节点
 PING 192.168.1.101 (192.168.1.101) 56(84) bytes of data.
 64 bytes from 192.168.1.101: icmp_seq=1 ttl=64 time=0.753 ms
@@ -58,8 +58,8 @@ PING 192.168.1.101 (192.168.1.101) 56(84) bytes of data.
 
 使用 `nmtui` 可以设置主机名，在界面中直接设置即可。设置成功后重新登录系统即可看到主机名变化。在例子中主机名被设置为：
 
-* 登录节点：`login01` 
-* 存储节点：`io01` 
+* 登录节点：`login01`&#x20;
+* 存储节点：`io01`&#x20;
 * 计算节点（两台）：`c[01-02]`
 
 #### 设置 hosts 文件
@@ -68,7 +68,7 @@ PING 192.168.1.101 (192.168.1.101) 56(84) bytes of data.
 
 hosts 文件的示例如下：
 
-```text
+```
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
@@ -81,9 +81,9 @@ hosts 文件的示例如下：
 
 这个文件在集群**所有节点**都必须相同。编辑好文件后从一台节点就可以方便使用主机名访问另一个节点了，可以测试 `ping io01` 查看效果。
 
-#### 计算节点连接外网（NAT）
+#### 计算节点连接外网（NAT） <a href="nat" id="nat"></a>
 
-你可能注意到，登录节点可以从外面访问，自然也可以上网。但其它节点（计算、存储）则不能从互联网下载东西，这可能造成一些麻烦（例如安装软件）。这需要将登录节点配置成 [NAT 服务器](https://en.wikipedia.org/wiki/Network_address_translation)。概括来说，其它节点访问外网都要先经过登录节点，登录节点访问后再将数据回传给原节点。这种模式也称登录节点是其它节点的**网关（gateway）**。
+你可能注意到，登录节点可以从外面访问，自然也可以上网。但其它节点（计算、存储）则不能从互联网下载东西，这可能造成一些麻烦（例如安装软件）。这需要将登录节点配置成 [NAT 服务器](https://en.wikipedia.org/wiki/Network\_address\_translation)。概括来说，其它节点访问外网都要先经过登录节点，登录节点访问后再将数据回传给原节点。这种模式也称登录节点是其它节点的**网关（gateway）**。
 
 {% hint style="info" %}
 该配置是可选的，计算节点不一定需要上网。配置 NAT 后从外部依然不能访问计算节点。
@@ -91,13 +91,13 @@ hosts 文件的示例如下：
 
 在登录节点，配置防火墙的 ipv4 转发：
 
-```text
+```
 firewall-cmd --zone=public --add-masquerade --permanent
 ```
 
 同时将连接内网的网络接口（假设是 ens36，具体名字可查询 `nmtui` 配置时的信息）关联至 trusted：
 
-```text
+```
 firewall-cmd --zone=trusted --add-interface=ens36 --permanent
 ```
 
@@ -107,13 +107,13 @@ firewall-cmd --zone=trusted --add-interface=ens36 --permanent
 
 最后重新载入防火墙配置：
 
-```text
+```
 firewall-cmd --reload
 ```
 
 如果配置正确，可以使用 `firewall-cmd --list-all-zones` 查看结果，正确应该有类似下面的输出：
 
-```text
+```
 public (active)
   target: default
   icmp-block-inversion: no
@@ -134,7 +134,7 @@ trusted (active)
 
 在计算节点（存储节点），将登录节点设置为网关（使用 `nmtui`）。
 
-![&#x5B58;&#x50A8;&#x8282;&#x70B9;&#x914D;&#x7F6E;&#x7F51;&#x5173;&#x793A;&#x610F;](../.gitbook/assets/nmtui2.png)
+![存储节点配置网关示意](../.gitbook/assets/nmtui2.png)
 
 需要注意如下方面：
 
@@ -172,4 +172,3 @@ trusted (active)
   * 编写 hosts 文件。
   * （可选）如果处于内网机器需要上网，需要配置 NAT（登录节点配置防火墙转发，计算存储等节点设置网关和 DNS）
 * 如果服务器厂商已经帮忙配好，可以通过检查 hosts 文件来获取信息。
-
